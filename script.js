@@ -853,5 +853,257 @@ function showNotification(
   );
 
 }
+// ================== CREATE ACCOUNT ==================
 
+const registerForm =
+  document.getElementById(
+    "registerForm"
+  );
+
+
+if (registerForm) {
+
+  registerForm.addEventListener(
+    "submit",
+    function(event) {
+
+      event.preventDefault();
+
+
+      const name =
+        document.getElementById(
+          "name"
+        ).value;
+
+
+      const email =
+        document.getElementById(
+          "email"
+        ).value;
+
+
+      const phone =
+        document.getElementById(
+          "phone"
+        ).value;
+
+
+      const password =
+        document.getElementById(
+          "password"
+        ).value;
+
+
+      const confirmPassword =
+        document.getElementById(
+          "confirmPassword"
+        ).value;
+
+
+      const message =
+        document.getElementById(
+          "message"
+        );
+
+
+      if (
+        password !==
+        confirmPassword
+      ) {
+
+        message.textContent =
+          "Passwords do not match.";
+
+        message.style.color =
+          "red";
+
+        return;
+
+      }
+
+
+      const user = {
+
+        name: name,
+
+        email: email,
+
+        phone: phone,
+
+        password: password
+
+      };
+
+
+      localStorage.setItem(
+        "jirimeUser",
+        JSON.stringify(user)
+      );
+
+
+      message.textContent =
+        "Account created successfully!";
+
+
+      message.style.color =
+        "green";
+
+
+      setTimeout(
+        function() {
+
+          window.location.href =
+            "login.html";
+
+        },
+        1500
+      );
+
+    }
+  );
+
+}
+
+
+// ================== LOGIN ==================
+
+const loginForm =
+  document.getElementById(
+    "loginForm"
+  );
+
+
+if (loginForm) {
+
+  loginForm.addEventListener(
+    "submit",
+    function(event) {
+
+      event.preventDefault();
+
+
+      const email =
+        document.getElementById(
+          "loginEmail"
+        ).value;
+
+
+      const password =
+        document.getElementById(
+          "loginPassword"
+        ).value;
+
+
+      const message =
+        document.getElementById(
+          "loginMessage"
+        );
+
+
+      const savedUser =
+        JSON.parse(
+          localStorage.getItem(
+            "jirimeUser"
+          )
+        );
+
+
+      if (!savedUser) {
+
+        message.textContent =
+          "Account not found. Please create an account.";
+
+        message.style.color =
+          "red";
+
+        return;
+
+      }
+
+
+      if (
+        email === savedUser.email &&
+        password === savedUser.password
+      ) {
+
+        // IMPORTANT:
+        // This allows booking
+
+        localStorage.setItem(
+          "loggedIn",
+          "true"
+        );
+
+
+        message.textContent =
+          "Login successful!";
+
+
+        message.style.color =
+          "green";
+
+
+        setTimeout(
+          function() {
+
+            window.location.href =
+              "index.html";
+
+          },
+          1000
+        );
+
+
+      } else {
+
+        message.textContent =
+          "Incorrect email or password.";
+
+        message.style.color =
+          "red";
+
+      }
+
+    }
+  );
+
+}
+
+
+// ================== CUSTOMER LOGOUT ==================
+
+function logout() {
+
+  localStorage.removeItem(
+    "loggedIn"
+  );
+
+
+  alert(
+    "You have logged out successfully."
+  );
+
+
+  window.location.href =
+    "login.html";
+
+}
+
+
+// ================== INITIALIZE ==================
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
+
+    showRooms();
+
+    showMenu();
+
+    setupBookingForm();
+
+    loadBookings();
+
+  }
+);
 
